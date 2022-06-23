@@ -1,6 +1,8 @@
 //variables
 const enviar = document.querySelector('#enviar');
-const formulario = document.querySelector('#enviar-mail')
+const resetear = document.querySelector('#resetBtn');
+const formulario = document.querySelector('#enviar-mail');
+const er = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 //variables para campos 
 
@@ -18,6 +20,14 @@ function eventList(){
     email.addEventListener('blur', validarFormulario);
     asunto.addEventListener('blur', validarFormulario);
     mensaje.addEventListener('blur', validarFormulario);
+
+    //Resetear el formulario
+
+    resetear.addEventListener('click', limpiar);
+
+    //enviar Email
+
+    formulario.addEventListener('submit', enviarEmail)
 };
 
 
@@ -33,19 +43,45 @@ function iniciarapp(){
 //valida el formulario
 function validarFormulario(e){
     if(e.target.value.length > 0){
-        console.log('si hay algo');
+
+        //eliminar los errores
+        const errores = document.querySelector('.error');
+        if (errores){
+            errores.remove();
+        }
+        
+        e.target.classList.remove('border', 'border-red-500');
+        e.target.classList.add('border', 'border-green-500');
     }else{
+        e.target.classList.remove('border', 'border-green-500');
         e.target.classList.add('border', 'border-red-500');
 
         mostrarError("Todos los Campos Estan Vacios");
     }
 
     if(e.target.type === 'email'){
-        const resultado = e.target.value.indexOf('@');
-        if(resultado < 0){
-            mostrarError("El email no es Valido")
+    
+        if(er.test(e.target.value)){
+            const errores = document.querySelector('.error');
+            if (errores){
+                errores.remove();
+            }
+            
+            e.target.classList.remove('border', 'border-red-500');
+            e.target.classList.add('border', 'border-green-500');
+        }else{
+            e.target.classList.remove('border', 'border-green-500');
+        e.target.classList.add('border', 'border-red-500');
+
+
+            mostrarError("Email no valido");
         }
 
+    }
+
+    if(er.test(email.value) && asunto.value !== '' && mensaje.value!==''){
+        enviar.disable = false;
+        enviar.classList.remove('cursor-not-allowed','opacity-50');
     }
 };
 
@@ -62,3 +98,44 @@ function mostrarError(mensaje){
     
 
 };
+
+//envia el Email
+
+function enviarEmail(e){
+    e.preventDefault();
+
+    //mostrar el spinner
+    const espiner = document.querySelector("#spinner");
+    espiner.style.display = 'flex';
+
+    //despues de 3s ocualtar el spinner y mostrar el mensaje 
+
+    setTimeout( ()=>{
+        espiner.style.display = 'none';
+        console.log("Esta funcion se ejecuta despues de 3S")
+
+
+        //mensaje de envio
+
+        const parrafo = document.createElement("p");
+        parrafo.textContent = "Se envio correctamente";
+        parrafo.classList.add("text-center", "my-10", 'p-2', "bg-green-500", "text-white", "font-bold", "uppercase")
+
+        //inserta el parrafo antes del spinner
+        formulario.insertBefore(parrafo, espiner);
+
+
+        setTimeout( ()=>{
+            parrafo.remove(); //eliminar el mensaje de exito
+
+            limpiar();
+        },5000)
+    },3000 );
+}
+
+//funcion para resetear el formulario
+
+function limpiar(){
+    formulario.reset();
+    iniciarapp();
+}
