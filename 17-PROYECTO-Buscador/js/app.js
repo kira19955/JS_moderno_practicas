@@ -4,7 +4,7 @@ const year = document.querySelector('#year')
 const minimo = document.querySelector('#minimo')
 const maximo = document.querySelector('#maximo')
 const puertas = document.querySelector('#puertas')
-const trasmision = document.querySelector('#trasmision')
+const trasmision = document.querySelector('#transmision')
 const color = document.querySelector('#color')
 
 
@@ -35,22 +35,49 @@ const datosBusqueda = {
 //eventos
 
 document.addEventListener('DOMContentLoaded', ()=>{
-    mostrarAutos();
+    mostrarAutos(autos);
 
     //llena las opciones de años
     llenarSelect();
 })
 
-marca.addEventListener('change', () =>{
-    console.log("cambio......")
+marca.addEventListener('change', e  =>{
+    datosBusqueda.marca = e.target.value
 
-    http://localhost:8069/survey/start/diseno-web-1/phantom
+    filtrarAuto();
+})
+
+year.addEventListener('change', e  =>{
+    datosBusqueda.year = e.target.value
+
+    filtrarAuto(); 
+})
+
+minimo.addEventListener('change', e  =>{
+    datosBusqueda.minimo = e.target.value
+
+    filtrarAuto();
+})
+
+maximo.addEventListener('change', e  =>{
+    datosBusqueda.maximo = e.target.value
+    //filtrarAuto();
+})
+puertas.addEventListener('change', e  =>{
+    datosBusqueda.puertas = e.target.value
+})
+trasmision.addEventListener('change', e  =>{
+    datosBusqueda.trasmision = e.target.value
+})
+color.addEventListener('change', e  =>{
+    datosBusqueda.color = e.target.value
 })
 
 
-
 //funciones
-function mostrarAutos(){
+function mostrarAutos(autos){
+    limpiarHtml();
+
     autos.forEach(auto =>{
 
         const {marca, modelo, year, puertas, transmision, precio, color} = auto;
@@ -67,6 +94,14 @@ function mostrarAutos(){
     })
 }
 
+//limpiar HTML
+
+function limpiarHtml(){
+    while (resultado.firstChild) {
+        resultado.removeChild(resultado.firstChild);
+    }
+}
+
 //genera los años del select 
 
 function llenarSelect(){
@@ -77,4 +112,34 @@ function llenarSelect(){
         year.appendChild(opcion);  //agrega las opciones del año al select 
 
     }
+}
+
+
+//funcion que filtra
+function filtrarAuto(){
+    const resultado = autos.filter(filtrarMarca).filter(filtrarYear).filter(filtrarMinimo);
+    //console.log(resultado);
+
+    mostrarAutos(resultado);
+}
+
+function filtrarMarca(auto){
+    if(datosBusqueda.marca){
+        return auto.marca === datosBusqueda.marca;
+    }
+    return auto;
+}
+
+function filtrarYear(auto){
+    if(datosBusqueda.year){
+        return auto.year === parseInt(datosBusqueda.year) ;
+    }
+    return auto;
+}
+
+function filtrarMinimo(auto){
+    if(datosBusqueda.minimo){
+        return auto.precio >= minimo;
+    }
+    return auto;
 }
