@@ -1,145 +1,175 @@
-//variables
-const marca = document.querySelector('#marca')
-const year = document.querySelector('#year')
-const minimo = document.querySelector('#minimo')
-const maximo = document.querySelector('#maximo')
-const puertas = document.querySelector('#puertas')
-const trasmision = document.querySelector('#transmision')
-const color = document.querySelector('#color')
+// Selectores
+const marca = document.querySelector('#marca');
+const year = document.querySelector('#year');
+const minimo = document.querySelector('#minimo');
+const maximo = document.querySelector('#maximo');
+const puertas = document.querySelector('#puertas');
+const transmision = document.querySelector('#transmision');
+const color = document.querySelector('#color');
 
-
-const resultado = document.querySelector('#resultado')
-
-
-//generador de fechas
+// crear los años
+const years = document.createElement('option');
 const max = new Date().getFullYear();
 const min = max - 10;
 
-console.log(max);
-console.log(min);
 
-//generar un objeto con la busqueda
+for(let i = max; i >  min; i--) {
+    const option =  document.createElement('option');
+    option.value = i;
+    option.innerText = i;
+    document.querySelector('#year').appendChild(option);
+}
 
+// Datos para la busqueda
 const datosBusqueda = {
     marca : '',
-    year : '',
+    year: '',
     minimo : '',
-    maximo : '',
-    puertas : '',
-    trasmision : '',
-    color : ''
+    maximo: '',
+    puertas: '',
+    transmision:'',
+    color:''
 }
 
-
-
-//eventos
-
-document.addEventListener('DOMContentLoaded', ()=>{
+document.addEventListener('DOMContentLoaded', () => {
     mostrarAutos(autos);
+});
 
-    //llena las opciones de años
-    llenarSelect();
-})
+// Event Listeners para el formulario
+marca.addEventListener('input', e => {
+    datosBusqueda.marca = e.target.value;
 
-marca.addEventListener('change', e  =>{
-    datosBusqueda.marca = e.target.value
-
+    // Mandar llamar la función de filtrar Autos
     filtrarAuto();
-})
+});
 
-year.addEventListener('change', e  =>{
-    datosBusqueda.year = e.target.value
-
-    filtrarAuto(); 
-})
-
-minimo.addEventListener('change', e  =>{
-    datosBusqueda.minimo = e.target.value
-
+year.addEventListener('input', e => {
+    datosBusqueda.year = Number(e.target.value);
+    // Mandar llamar la función de filtrar Autos
     filtrarAuto();
-})
+});
 
-maximo.addEventListener('change', e  =>{
-    datosBusqueda.maximo = e.target.value
-    //filtrarAuto();
-})
-puertas.addEventListener('change', e  =>{
-    datosBusqueda.puertas = e.target.value
-})
-trasmision.addEventListener('change', e  =>{
-    datosBusqueda.trasmision = e.target.value
-})
-color.addEventListener('change', e  =>{
+minimo.addEventListener('input', e => {
+    datosBusqueda.minimo = Number(e.target.value);
+    // Mandar llamar la función de filtrar Autos
+    filtrarAuto();
+});
+
+
+maximo.addEventListener('input', e => {
+    datosBusqueda.maximo = Number(e.target.value);
+    // Mandar llamar la función de filtrar Autos
+    filtrarAuto();
+});
+
+
+puertas.addEventListener('input', e => {
+    datosBusqueda.puertas = Number(e.target.value);
+    // Mandar llamar la función de filtrar Autos
+    filtrarAuto();
+});
+
+transmision.addEventListener('input', e => {
+    datosBusqueda.transmision = e.target.value
+    // Mandar llamar la función de filtrar Autos
+    filtrarAuto();
+});
+
+color.addEventListener('input', e => {
     datosBusqueda.color = e.target.value
-})
+    // Mandar llamar la función de filtrar Autos
+    filtrarAuto();
+});
 
+function limpiarHTML() {
+    // Leer el elemento Resultado
+    const contenedor = document.querySelector('#resultado');
 
-//funciones
+    // limpiar los resultados anteriores
+    while(contenedor.firstChild) {
+        contenedor.removeChild(contenedor.firstChild);
+    }
+}
+
 function mostrarAutos(autos){
-    limpiarHtml();
+    limpiarHTML();
 
-    autos.forEach(auto =>{
+    // Leer el elemento Resultado
+    const contenedor = document.querySelector('#resultado');
 
-        const {marca, modelo, year, puertas, transmision, precio, color} = auto;
+    // Construir el HTML de los autos
+    autos.forEach(auto => {
         const autoHTML = document.createElement('p');
-        autoHTML.textContent = `
-        ${marca} ${modelo} - ${year} - ${puertas} Puertas - Trasmisión: ${transmision} - precio: ${precio} - Color: ${color}
-        
+        autoHTML.innerHTML = `
+            <p>${auto.marca} ${auto.modelo} - ${auto.year} - ${auto.puertas} Puertas - Transmisión: ${auto.transmision} - Precio: ${auto.precio} - Color: ${auto.color}</p>
         `;
-
-
-        //insertar en el HTML
-
-        resultado.appendChild(autoHTML);
+        contenedor.appendChild(autoHTML);
     })
 }
+function noResultado() {
+    limpiarHTML();
 
-//limpiar HTML
-
-function limpiarHtml(){
-    while (resultado.firstChild) {
-        resultado.removeChild(resultado.firstChild);
-    }
+    const noResultado = document.createElement('div');
+    noResultado.classList.add('alerta', 'error');
+    noResultado.appendChild(document.createTextNode('No hay Resultados'));
+    document.querySelector('#resultado').appendChild(noResultado);
 }
 
-//genera los años del select 
+function filtrarAuto() {
+   const resultado = autos.filter(filtrarMarca).filter(filtrarYear).filter(filtrarMinimo).filter(filtrarMaximo).filter(filtrarPuertas).filter(filtrarTransmision).filter(filtrarColor);
 
-function llenarSelect(){
-    for ( let i = max; i>=min; i--){
-        const opcion = document.createElement('option');
-        opcion.value = i;
-        opcion.textContent = i;
-        year.appendChild(opcion);  //agrega las opciones del año al select 
-
-    }
+//    console.log(resultado);
+   if(resultado.length){
+        mostrarAutos(resultado);
+   } else {
+       noResultado();
+   }
 }
 
 
-//funcion que filtra
-function filtrarAuto(){
-    const resultado = autos.filter(filtrarMarca).filter(filtrarYear).filter(filtrarMinimo);
-    //console.log(resultado);
-
-    mostrarAutos(resultado);
-}
-
-function filtrarMarca(auto){
+// Aplica los filtros
+function filtrarMarca(auto) {
     if(datosBusqueda.marca){
         return auto.marca === datosBusqueda.marca;
-    }
+    } 
     return auto;
 }
-
-function filtrarYear(auto){
+function filtrarYear(auto) {
     if(datosBusqueda.year){
-        return auto.year === parseInt(datosBusqueda.year) ;
+        return auto.year === datosBusqueda.year;
     }
     return auto;
 }
 
-function filtrarMinimo(auto){
+function filtrarMinimo(auto) {
     if(datosBusqueda.minimo){
-        return auto.precio >= minimo;
+        return auto.precio >= datosBusqueda.minimo;
     }
     return auto;
+}
+function filtrarMaximo(auto) {
+    if(datosBusqueda.maximo){
+        return auto.precio <= datosBusqueda.maximo;
+    }
+    return auto;
+}
+function filtrarPuertas(auto) {
+    if(datosBusqueda.puertas){
+        return auto.puertas === datosBusqueda.puertas;
+    }
+    return auto;
+}
+
+function filtrarTransmision(auto) {
+    if(datosBusqueda.transmision){
+        return auto.transmision === datosBusqueda.transmision;
+    } 
+    return auto;
+}
+
+function filtrarColor(auto){
+    if(datosBusqueda.color){
+        return auto.color === datosBusqueda.color;
+    } 
+    return  auto;
 }
