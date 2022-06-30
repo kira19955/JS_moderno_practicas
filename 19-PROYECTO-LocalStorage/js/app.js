@@ -9,6 +9,16 @@ let tweets = [];
 eventListeners();
 function eventListeners(){
     formulario.addEventListener('submit', agregarTweet)
+
+    //cuando el documento esta listo
+
+    document.addEventListener('DOMContentLoaded', () =>{
+        tweets = JSON.parse(localStorage.getItem ('twees')) || [];
+
+        console.log(tweets);
+
+        crearHtml();
+    });
 }
 
 
@@ -73,6 +83,15 @@ function crearHtml(){
     limpiarHtml();
     if(tweets.length > 0){
         tweets.forEach(tweet1 =>{
+            //agregar un boton
+
+            const btn = document.createElement("a");
+            btn.classList.add("borrar-tweet");
+            btn.textContent = "X";
+
+            btn.onclick = () =>{
+                borrarTweet(tweet1.id);
+            }
 
             //crea el HTML
             const li = document.createElement("li");
@@ -80,12 +99,27 @@ function crearHtml(){
             //añadir el texto
             li.innerText = tweet1.texto;
 
+            //asignar el boton
+
+            li.appendChild(btn);
+
             //insertarlo en el HTML
 
             lista.appendChild(li);
 
         })
     }
+
+    sincronizarStorage();
+}
+
+function sincronizarStorage(){
+    localStorage.setItem('twees', JSON.stringify(tweets));
+}
+function borrarTweet(id){
+    tweets = tweets.filter (tweet => tweet.id !== id);
+    
+    crearHtml();
 }
 
 function limpiarHtml(){
