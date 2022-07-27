@@ -59,6 +59,8 @@ class UI{
     }
 
     agregarGastoListado(gastos){
+        this.limpiarHTML();
+        
         gastos.forEach(gasto => {
             const {cantidad, nombre, id} = gasto;
 
@@ -80,6 +82,12 @@ class UI{
             //agregar al HTML
             gastoListado.appendChild(nuevoGasto);
         });
+    }
+
+    limpiarHTML(){
+        while(gastoListado.firstChild){
+            gastoListado.removeChild(gastoListado.firstChild)
+        }
     }
 
 }
