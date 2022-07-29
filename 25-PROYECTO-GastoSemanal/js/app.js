@@ -22,7 +22,12 @@ class Presupuesto{
 
     nuevoGasto(gasto){
         this.gastos = [...this.gastos, gasto]
-        console.log(this.gastos);
+        this.calcularRestante();
+    }
+
+    calcularRestante(){
+        const gastado = this.gastos.reduce( (total, gasto) => total + gasto.cantidad, 0)
+        this.restante = this.presupuesto - gastado;
     }
 
 }
@@ -70,7 +75,7 @@ class UI{
             nuevoGasto.dataset.id = id;
 
             //agregar el HTML al gasto
-            nuevoGasto.innerHTML = `${nombre} <span class="badge badge-primary badge-pill"> ${cantidad} </span>`;
+            nuevoGasto.innerHTML = ` ${nombre} <span class="badge badge-primary badge-pill"> $ ${cantidad}</span>`;
 
             //boton para borrar el gasto
             const btnborrar = document.createElement("button");
@@ -88,6 +93,17 @@ class UI{
         while(gastoListado.firstChild){
             gastoListado.removeChild(gastoListado.firstChild)
         }
+    }
+
+    calcularRestante(restante){
+        document.querySelector("#restante").textContent = restante;
+    }    
+
+    comprobarPresupues(presupuestoObj){
+        const {presupuesto, restante } = presupuestoObj
+
+        //comrpobar el 25%
+        if()
     }
 
 }
@@ -138,8 +154,13 @@ function agregarGasto(e){
     ui.imprimirAlerta("Correcto");
 
     //agregar gastos  
-    const {gastos} = presupuesto;
+    const {gastos, restante} = presupuesto;
     ui.agregarGastoListado(gastos);
+
+    ui.calcularRestante(restante);
+
+    ui.comprobarPresupues(presupuesto);
+
     formulario.reset()
     
 }
