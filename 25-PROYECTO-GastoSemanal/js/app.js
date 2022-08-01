@@ -102,8 +102,20 @@ class UI{
     comprobarPresupues(presupuestoObj){
         const {presupuesto, restante } = presupuestoObj
 
+        const restanteDiv = document.querySelector(".restante")
         //comrpobar el 25%
-        if()
+        if((presupuesto / 4) > restante){
+            restanteDiv.classList.remove("alert-success", "alert-warning");
+            restanteDiv.classList.add("alert-danger");
+        }else if((presupuesto / 2)> restante){
+            restanteDiv.classList.remove("alert-success");
+            restanteDiv.classList.add("alert-warning");
+        }
+
+        if(restante <= 0){
+            ui.imprimirAlerta("EL PRESUPUESTO SE HA AGOTADO", "error");
+            formulario.querySelector('button[type="submit"]').disabled = true
+        }
     }
 
 }
