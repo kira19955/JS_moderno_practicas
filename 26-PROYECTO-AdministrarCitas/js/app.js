@@ -27,6 +27,10 @@ class Citas{
         this.citas = this.citas.filter( cita => cita.id !== id)
     }
 
+    editarCita(citaActualizada){
+        this.citas = this.citas.map( cita => cita.id === citaActualizada.id ? citaActualizada : cita);
+    }
+
 }
 
 class UI{
@@ -177,15 +181,24 @@ function nuevaCita(e){
     }
 
     if(editando){
+        ui.imprimirAlerta("Editado correctamente");
 
+        administrarCitas.editarCita({...citaObj});
+
+        formulario.querySelector('button[type="submit"]').textContent = "Crear Cita";
+
+        editando = false;
     }else{
+        citaObj.id = Date.now();
 
+        administrarCitas.agragarCita({...citaObj});
+
+        //mensaje agregado 
+
+        ui.imprimirAlerta("se agrego correctamente");
     }
 
-    //generar un ID unico
-    citaObj.id = Date.now();
-
-    administrarCitas.agragarCita({...citaObj});
+    //generar un ID unico   
 
     reiniciarObjeto();
 
@@ -218,7 +231,7 @@ function cargarEdicion(cita){
 
     //llenar los inputs
     mascota_input.value = mascota;
-    propietario_input.vale = propietario;
+    propietario_input.value = propietario;
     telefono_input.value = telefono;
     fecha_input.value = fecha;
     hora_input.value = hora;
