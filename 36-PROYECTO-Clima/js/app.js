@@ -57,7 +57,7 @@ function consultarAPI(ciudad, pais){
 
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${ciudad},${pais}&appid=${appID}`;
 
-    console.log(url)
+    spinner();
 
     fetch(url)
     .then(respuesta => respuesta.json())
@@ -76,17 +76,35 @@ function consultarAPI(ciudad, pais){
 }
 
 function mostrarClima(datos){
-    const {main:{temp, temp_max, temp_min}} = datos;
+    const {name, main:{temp, temp_max, temp_min}} = datos;
+
+    const nombre = document.createElement('p');
+    nombre.textContent = `Clima En ${name}`;
+    nombre.classList.add('font-bold', 'text-2xl')
 
     const temperatura_actual =  kelvinACentigrados(temp)
+    const max =  kelvinACentigrados(temp_max)
+    const min =  kelvinACentigrados(temp_min)
 
     const actual = document.createElement('p');
     actual.innerHTML = `${temperatura_actual}&#8451;`;
     actual.classList.add('font-bold', 'text-6xl');
 
+    const maxtem = document.createElement('p');
+    maxtem.innerHTML = `Max: ${max}&#8451;`
+    maxtem.classList.add('text-xl');
+    
+    const mintem = document.createElement('p');
+    mintem.innerHTML = `Min: ${min}&#8451;`
+    mintem.classList.add('text-xl');
+
     const resultadoDiv = document.createElement('div');
     resultadoDiv.classList.add('text-center', 'text-white');
+    
+    resultadoDiv.appendChild(nombre);
     resultadoDiv.appendChild(actual);
+    resultadoDiv.appendChild(maxtem);
+    resultadoDiv.appendChild(mintem);
 
 
     resultado.appendChild(resultadoDiv);
@@ -103,4 +121,23 @@ function limpiarHTML(){
     while(resultado.firstChild){
         resultado.removeChild(resultado.firstChild)
     }
+}
+
+
+function spinner(){
+
+    limpiarHTML();
+
+    const spinner = document.createElement('div');
+    spinner.classList.add('spinner')
+    spinner.innerHTML = `
+    
+  <div class="rect2"></div>
+  <div class="rect3"></div>
+  <div class="rect4"></div>
+  <div class="rect5"></div>
+
+    `;
+
+    resultado.appendChild(spinner);
 }
