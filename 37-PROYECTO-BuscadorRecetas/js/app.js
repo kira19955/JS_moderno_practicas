@@ -40,8 +40,23 @@ function iniciarApp(){
 
         //iterar en los resultados
         recetas.forEach(receta =>{
+            const {idMeal, strMeal, strMealThumb} = receta
             const recetaContenedor = document.createElement('div');
+            recetaContenedor.classList.add('col-md-4'); 
+
+            const recetaCard = document.createElement('div');
+            recetaCard.classList.add('card', 'mb-4');
+
+            const recetaImagen =document.createElement('img');
+            recetaImagen.classList.add('card-img-top');
+            recetaImagen.alt = `Imagen de la receta ${strMeal}`;
+            recetaImagen.src = strMealThumb;
+
+            const recetaBody = document.createElement('div');
+            recetaBody.classList.add('card-body');
             
+            console.log(recetaImagen);
+
         })
     }
 }
