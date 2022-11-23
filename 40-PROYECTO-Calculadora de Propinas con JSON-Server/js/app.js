@@ -122,5 +122,78 @@ function mostrarPlatillos(platillos){
 }
 
 function agregarPlatillo(producto){
-    console.log(producto)
+    let {pedido} = cliente;
+    //revisar que la cantidad sea mayor a 0
+    if (producto.cantidad > 0){
+
+        if(pedido.some(articulo => articulo.id === producto.id)){
+            const pedidoActualizado = pedido.map(articulo =>{
+                if(articulo.id === producto.id){
+                    articulo.cantidad = producto.cantidad
+                }
+                return articulo;
+            });
+
+            cliente.pedido = [...pedidoActualizado];
+        }else{
+            cliente.pedido = [...pedido, producto]
+        }
+        
+    }else{
+        //eliminar elementos cuando la cantidad sea Cero
+        const resultado = pedido.filter(articulo => articulo.id !== producto.id)
+        cliente.pedido = [...resultado];
+    }
+
+    //limpiar HTML
+    limpiarHtml()
+
+    //MOSTRAR EL RSUMEN 
+    actualizarResumen();
+}
+
+function actualizarResumen(){
+const contenido = document.querySelector('#resumen .contenido')
+
+const resumen = document.createElement('div')
+
+resumen.classList.add('col-md-6');
+
+//informacion de la mesa
+const mesa = document.createElement('p');
+mesa.textContent = 'mesa: ';
+mesa.classList.add('fe-bold')
+
+const mesaSpan = document.createElement('span');
+mesaSpan.textContent = cliente.mesa;
+mesaSpan.classList.add('fw-normal');
+
+//informacion de la hora
+const hora = document.createElement('p');
+hora.textContent = 'hora: ';
+hora.classList.add('fe-bold')
+
+const horaSpan = document.createElement('span');
+horaSpan.textContent = cliente.mesa;
+horaSpan.classList.add('fw-normal');
+
+mesa.appendChild(mesaSpan);
+hora.appendChild(horaSpan);
+
+//titulo de la seccion 
+
+
+resumen.appendChild(mesa);
+resumen.appendChild(hora);
+
+contenido.appendChild(resumen);
+}
+
+function limpiarHtml(){
+    const contenido  = document.querySelector('#resumen .contenido')
+
+    while (contenido.firstChild){
+        contenido.removeChild(contenido.firstChild)
+    }
+
 }
