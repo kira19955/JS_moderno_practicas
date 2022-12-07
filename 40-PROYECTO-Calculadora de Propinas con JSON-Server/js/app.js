@@ -148,11 +148,11 @@ function agregarPlatillo(producto) {
     //limpiar HTML
     limpiarHtml()
 
-    if(cliente.pedido.length){
+    if (cliente.pedido.length) {
 
-    //MOSTRAR EL RSUMEN 
-    actualizarResumen();
-    }else{
+        //MOSTRAR EL RSUMEN 
+        actualizarResumen();
+    } else {
         mensajePedidoVacio()
     }
 
@@ -163,7 +163,7 @@ function actualizarResumen() {
 
     const resumen = document.createElement('div')
 
-    resumen.classList.add('col-md-6', 'card', 'py-5', 'px-3', 'shadow');
+    resumen.classList.add('col-md-6', 'card', 'py-2', 'px-3', 'shadow');
 
     //informacion de la mesa
     const mesa = document.createElement('p');
@@ -195,12 +195,12 @@ function actualizarResumen() {
 
     const grupo = document.createElement('ul');
     grupo.classList.add('list-group');
-    
-    const {pedido} = cliente;
-    pedido.forEach(articulo => {
-        const {nombre,cantidad,precio,id} = articulo;
 
-        const lista = document.createElement('li'); 
+    const { pedido } = cliente;
+    pedido.forEach(articulo => {
+        const { nombre, cantidad, precio, id } = articulo;
+
+        const lista = document.createElement('li');
         lista.classList.add('list-group-item');
 
         const nombreEl = document.createElement('h4');
@@ -248,9 +248,9 @@ function actualizarResumen() {
         //Boton para eliminar 
 
         const botonElminar = document.createElement('button');
-        botonElminar.classList.add('btn','btn-danger');
+        botonElminar.classList.add('btn', 'btn-danger');
         botonElminar.textContent = "Eliminar Del Pedido";
-        botonElminar.onclick = function(){
+        botonElminar.onclick = function () {
             eliminarProducto(id)
         }
 
@@ -267,13 +267,17 @@ function actualizarResumen() {
     })
 
 
-
+    resumen.appendChild(heading);
     resumen.appendChild(mesa);
     resumen.appendChild(hora);
-    resumen.appendChild(heading);
+
     resumen.appendChild(grupo);
 
     contenido.appendChild(resumen);
+
+    //funcion mostrar formulario Propinas
+
+    formularioPropinas();
 }
 
 function limpiarHtml() {
@@ -285,32 +289,32 @@ function limpiarHtml() {
 
 }
 
-function eliminarProducto(id){
-    const {pedido} = cliente
+function eliminarProducto(id) {
+    const { pedido } = cliente
     const resultado = pedido.filter(articulo => articulo.id !== id)
-        cliente.pedido = [...resultado];
+    cliente.pedido = [...resultado];
 
     console.log(cliente.pedido);
 
     limpiarHtml()
 
-    if(cliente.pedido.length){
+    if (cliente.pedido.length) {
 
         //MOSTRAR EL RSUMEN 
         actualizarResumen();
-        }else{
-            mensajePedidoVacio()
-        }
+    } else {
+        mensajePedidoVacio()
+    }
 
 
 
     //se gresa a Cero el formulario
     const productoEliminado = `#producto-${id}`;
     const inputEliminado = document.querySelector(productoEliminado);
-    inputEliminado.value=0
+    inputEliminado.value = 0
 }
 
-function mensajePedidoVacio(){
+function mensajePedidoVacio() {
     const contenido = document.querySelector('#resumen .contenido');
 
     const texto = document.createElement('p');
@@ -318,5 +322,87 @@ function mensajePedidoVacio(){
     texto.textContent = "Añade los elementos del pedido";
 
     contenido.appendChild(texto);
+
+}
+
+function formularioPropinas() {
+    const contenido = document.querySelector('#resumen .contenido');
+
+    const formulario = document.createElement('div');
+    formulario.classList.add('col-md-6', 'formulario');
+
+    const divFormulario = document.createElement('div');
+    divFormulario.classList.add('card', 'py-2', 'px-3', 'shadow')
+
+    const heading = document.createElement('h3');
+    heading.classList.add('my-4');
+    heading.textContent = "Propina";
+    heading.classList.add('text-center')
+
+
+    //Radio Button 10%
+    const radio10 = document.createElement('input');
+    radio10.type = 'radio';
+    radio10.name = 'propina';
+    radio10.value = '10';
+    radio10.classList.add('form-check-input');
+
+    const radio10Label = document.createElement('label');
+    radio10Label.classList.add('form-check-label')
+    radio10Label.textContent = "10%"
+
+    const radio10Div = document.createElement('div');
+    radio10Div.classList.add('form-check');
+
+    radio10Div.appendChild(radio10);
+    radio10Div.appendChild(radio10Label);
+
+
+    //Radio Button 25%
+    const radio25 = document.createElement('input');
+    radio25.type = 'radio';
+    radio25.name = 'propina';
+    radio25.value = '25';
+    radio25.classList.add('form-check-input');
+
+    const radio25Label = document.createElement('label');
+    radio25Label.classList.add('form-check-label')
+    radio25Label.textContent = "25%"
+
+    const radio25Div = document.createElement('div');
+    radio25Div.classList.add('form-check');
+
+    radio25Div.appendChild(radio25);
+    radio25Div.appendChild(radio25Label);
+
+
+    //Radio Button 50%
+    const radio50 = document.createElement('input');
+    radio50.type = 'radio';
+    radio50.name = 'propina';
+    radio50.value = '50';
+    radio50.classList.add('form-check-input');
+
+    const radio50Label = document.createElement('label');
+    radio50Label.classList.add('form-check-label')
+    radio50Label.textContent = "50%"
+
+    const radio50Div = document.createElement('div');
+    radio50Div.classList.add('form-check');
+
+    radio50Div.appendChild(radio50);
+    radio50Div.appendChild(radio50Label);
+
+
+    divFormulario.appendChild(heading);
+    divFormulario.appendChild(radio10Div);
+    divFormulario.appendChild(radio25Div);
+    divFormulario.appendChild(radio50Div);
+
+    formulario.appendChild(divFormulario);
+
+
+    contenido.appendChild(formulario);
+
 
 }
