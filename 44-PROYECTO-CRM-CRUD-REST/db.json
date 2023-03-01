@@ -1,11 +1,25 @@
 {
   "clientes": [
     {
-      "nombre": "luis antonio cruz gutierrez",
-      "email": "kira.lc2@gmail.com",
+      "nombre": "juan antonio cruz gutierrez",
+      "email": "prueba.lc2@gmail.com",
       "telefono": "2283214312",
       "empresa": "xxxx",
-      "id": 1
+      "id": 2
+    },
+    {
+      "nombre": "monserrat gonzales",
+      "email": "prueba@gmail.com",
+      "telefono": "2283214312",
+      "empresa": "creditaria",
+      "id": 3
+    },
+    {
+      "nombre": "quack",
+      "email": "quack.lc2@gmail.com",
+      "telefono": "2283214312",
+      "empresa": "jefaso",
+      "id": 4
     }
   ]
 }
