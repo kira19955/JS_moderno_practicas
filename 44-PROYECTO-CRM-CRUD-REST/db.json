@@ -1,10 +1,10 @@
 {
   "clientes": [
     {
-      "nombre": "juan antonio cruz gutierrez",
+      "nombre": "cruz gutierrez",
       "email": "prueba.lc2@gmail.com",
       "telefono": "2283214312",
-      "empresa": "xxxx",
+      "empresa": "prueba.lc2@gmail.com",
       "id": 2
     },
     {

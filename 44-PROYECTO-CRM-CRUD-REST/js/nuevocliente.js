@@ -1,4 +1,4 @@
-import {mostrarAlerta} from './funciones.js';
+import {mostrarAlerta, validar} from './funciones.js';
 import {nuevoCliente} from './API.js'
 (function(){
     const formulario = document.querySelector('#formulario');
@@ -31,10 +31,7 @@ import {nuevoCliente} from './API.js'
         
     }
 
-    function validar(obj){
-        return  !Object.values(obj).every( input => input !== '');
-
-    }
+    
 
 
 })();
